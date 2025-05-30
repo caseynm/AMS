@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px 20px 20px; /* Added bottom padding */
+    background-color: #fff;
+    min-height: 75vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Added subtle shadow */
+}
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: #0779e4 3px solid;
+}
+header a {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 0 10px;
+}
+header nav { margin-top: 10px; }
+header h1 a:hover, header nav a:hover {
+    color: #0779e4;
+}
+
+main { padding-top: 20px; }
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    margin-top: 1rem;
+}
+h2, h3 { color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top:15px;}
+form div { margin-bottom: 10px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input[type="text"], input[type="email"], input[type="password"], input[type="url"], input[type="date"], textarea, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important for 100% width */
+}
+textarea { min-height: 80px; }
+select[multiple] { height: auto; min-height: 100px; }
+button[type="submit"] { /* More specific selector */
+    background-color: #337ab7; /* Bootstrap primary blue */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+button[type="submit"]:hover { background-color: #286090; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background-color: #f2f2f2; font-weight: bold; }
+tbody tr:nth-child(odd) { background-color: #f9f9f9; } /* Zebra striping for tables */
+tbody tr:hover { background-color: #f1f1f1; } /* Hover effect for table rows */
+
+ul { list-style: none; padding: 0; }
+ul li {
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom:10px;
+    padding:15px; /* Increased padding */
+    border-radius:4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow for li elements */
+}
+ul li strong { font-size: 1.1em; color: #337ab7; } /* Make titles in lists stand out */
+
+hr { margin: 20px 0; border: 0; border-top: 1px solid #eee; }
+
+/* Messages styling */
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+.message.error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+.message.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+/* Specific link styling */
+a { color: #337ab7; text-decoration: none; }
+a:hover { color: #23527c; text-decoration: underline; }
+
+/* Form specific styling for better alignment and spacing */
+form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #e3e3e3;
+}
