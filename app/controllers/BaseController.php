@@ -11,39 +11,41 @@ class BaseController {
     }
 
     protected function redirect($url_path_with_query = '') {
-        // Ensure the URL starts with index.php?url= or is just index.php for home
-        $base_url = "index.php";
-        if (!empty($url_path_with_query)) {
-            if (strpos($url_path_with_query, 'index.php?url=') !== 0 && strpos($url_path_with_query, '?url=') !== 0) {
-                 // Check if it's just a path like 'user/login' or 'user/login&error=...'
-                if (strpos($url_path_with_query, '&') !== false || strpos($url_path_with_query, '=') !== false && strpos($url_path_with_query, '?') === false) {
-                    // Contains query params but no initial ?url=
-                    // e.g. user/login&error=1
-                    $parts = explode('&', $url_path_with_query, 2);
-                    $path = $parts[0];
-                    $query = $parts[1] ?? '';
-                    $url_path_with_query = "?url=" . $path . ($query ? '&' . $query : '');
-
-                } else if (strpos($url_path_with_query, '?') === false) {
-                     // Just a path like 'user/login'
-                    $url_path_with_query = "?url=" . $url_path_with_query;
-                }
-                 // If it was like ?url=user/login, it's fine
-            }
+        $path_segment = '';
+        if (empty($url_path_with_query) || $url_path_with_query === 'home/index' || $url_path_with_query === '/home/index') {
+            // For home/index or empty, redirect to the base path itself.
+            // If APP_BASE_URL is just '/', this results in '/'.
+            // If APP_BASE_URL is '/AMS/', this results in '/AMS/'.
+            $path_segment = '';
         } else {
-            // Default to home/index if no path is provided
-            $url_path_with_query = "?url=home/index";
+            $path_segment = $url_path_with_query;
         }
 
-        // Prepend / if index.php is at root, otherwise adjust if in subdirectory
-        // Assuming index.php is at the web root for these links.
-        // If AMS is in a subfolder like /ams/, this needs to be /ams/index.php?...
-        // For now, keeping it simple as /index.php...
-        // $final_url = "/" . ltrim($base_url . $url_path_with_query, '/');
-        // Prepend BASE_PATH, ensuring no double slashes
-        $path_part = ltrim($base_url . $url_path_with_query, '/');
-        $final_url = rtrim(BASE_PATH, '/') . '/' . $path_part;
+        // Ensure query string is correctly formatted (first '&' becomes '?')
+        // if $path_segment itself contains what should be a query string.
+        if (strpos($path_segment, '?') === false && strpos($path_segment, '&') !== false) {
+             // Split path from query string like params
+            $parts = explode('&', $path_segment, 2);
+            $path_only = $parts[0];
+            $query_string = $parts[1] ?? '';
+            if (!empty($query_string)) {
+                $path_segment = $path_only . '?' . $query_string;
+            } else {
+                $path_segment = $path_only;
+            }
+        }
 
+        $final_url = '';
+        // rtrim APP_BASE_URL to prevent double slashes if it ends with one
+        $trimmed_base_path = rtrim(APP_BASE_URL, '/');
+
+        if (empty($path_segment)) {
+            $final_url = $trimmed_base_path . '/'; // Ensure trailing slash for base
+            if ($final_url === '//') $final_url = '/'; // Handle if APP_BASE_URL was just '/'
+        } else {
+            // ltrim path_segment to prevent double slashes if it starts with one
+            $final_url = $trimmed_base_path . '/' . ltrim($path_segment, '/');
+        }
 
         header("Location: " . $final_url);
         exit;
@@ -66,10 +68,10 @@ class BaseController {
             $sanitized_data[$key] = $value; // Further sanitization (e.g. htmlspecialchars) should happen IN THE VIEW for output
         }
 
-        // Add BASE_PATH to be available in views
+        // Add APP_BASE_URL to be available in views
         // Added after sanitization loop to avoid conflict with protected keys,
-        // assuming BASE_PATH itself is a safe, defined constant.
-        $sanitized_data['BASE_PATH'] = BASE_PATH;
+        // assuming APP_BASE_URL itself is a safe, defined constant.
+        $sanitized_data['APP_BASE_URL'] = APP_BASE_URL; // Use APP_BASE_URL here
 
         extract($sanitized_data);
 

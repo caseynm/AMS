@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <h2>Edit Task</h2>
 <?php if (isset($data['task'])): ?>
-<form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/update/<?php echo $data['task']['id']; ?>" method="POST">
+<form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/update/<?php echo $data['task']['id']; ?>" method="POST">
     <div>
         <label for="description">Description:</label>
         <textarea id="description" name="description" required><?php echo htmlspecialchars($data['task']['description']); ?></textarea>
@@ -22,9 +22,9 @@
     <input type="hidden" name="document_id" value="<?php echo $data['task']['document_id']; ?>">
     <button type="submit">Update Task</button>
 </form>
-<p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/listByDocument/<?php echo $data['task']['document_id']; ?>">Back to Tasks for Document</a></p>
+<p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $data['task']['document_id']; ?>">Back to Tasks for Document</a></p>
 <?php else: ?>
     <p>Task not found.</p>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
 <?php endif; ?>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

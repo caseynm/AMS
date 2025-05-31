@@ -2,7 +2,7 @@
 
 <?php if (isset($data['process_id']) && isset($data['process_title'])): ?>
     <h2>Add New Document to Process: <?php echo htmlspecialchars($data['process_title']); ?></h2>
-    <form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=document/create/<?php echo $data['process_id']; ?>" method="POST">
+    <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/create/<?php echo $data['process_id']; ?>" method="POST">
         <div>
             <label for="name">Document Name:</label>
             <input type="text" id="name" name="name" required value="<?php echo htmlspecialchars($_GET['name'] ?? ''); ?>">
@@ -17,10 +17,10 @@
         </div>
         <button type="submit">Add Document</button>
     </form>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/show/<?php echo $data['process_id']; ?>">Back to Process Details</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $data['process_id']; ?>">Back to Process Details</a></p>
 <?php else: ?>
     <p>Process information is missing. Cannot add document.</p>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/index">Go to Accreditation Processes</a></p>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

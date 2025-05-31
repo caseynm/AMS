@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <h2>Register</h2>
-<form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/register" method="POST">
+<form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/register" method="POST">
     <div>
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required value="<?php echo htmlspecialchars($_GET['name'] ?? ''); ?>">
@@ -26,5 +26,5 @@
     <?php endif; ?>
     <button type="submit">Register</button>
 </form>
-<p>Already have an account? <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/showLoginForm">Login here</a>.</p>
+<p>Already have an account? <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/showLoginForm">Login here</a>.</p>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

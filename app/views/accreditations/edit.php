@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
 <h2>Edit Accreditation Process</h2>
 <?php if (isset($data['process'])): ?>
-<form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/update/<?php echo $data['process']['id']; ?>" method="POST">
+<form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/update/<?php echo $data['process']['id']; ?>" method="POST">
     <div>
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($data['process']['title']); ?>" required>
@@ -27,5 +27,5 @@
 <?php else: ?>
     <p>Process not found.</p>
 <?php endif; ?>
-<p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/show/<?php echo $data['process']['id']; ?>">Back to Process Details</a></p>
+<p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $data['process']['id']; ?>">Back to Process Details</a></p>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

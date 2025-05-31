@@ -2,7 +2,7 @@
 
 <?php if (isset($data['document_id']) && isset($data['document_name'])): ?>
     <h2>Create New Task for Document: <?php echo htmlspecialchars($data['document_name']); ?></h2>
-    <form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/create/<?php echo $data['document_id']; ?>" method="POST">
+    <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/create/<?php echo $data['document_id']; ?>" method="POST">
         <div>
             <label for="description">Description:</label>
             <textarea id="description" name="description" required><?php echo htmlspecialchars($_GET['description'] ?? ''); ?></textarea>
@@ -22,10 +22,10 @@
         </div>
         <button type="submit">Create Task</button>
     </form>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/listByDocument/<?php echo $data['document_id']; ?>">Back to Tasks for Document</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $data['document_id']; ?>">Back to Tasks for Document</a></p>
 <?php else: ?>
     <p>Document information is missing. Cannot create task.</p>
-     <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
+     <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

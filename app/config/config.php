@@ -7,7 +7,7 @@
 
 // Based on user feedback: http://localhost/AMS/public/
 // The part of the URL before /public/index.php that represents the application's root for routing purposes.
-define('BASE_PATH', '/AMS/');
+define('APP_BASE_URL', '/AMS/');
 
 // Other global configurations can be added here later, for example:
 // define('SITE_NAME', 'Accreditation Management System');

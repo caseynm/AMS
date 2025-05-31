@@ -4,7 +4,7 @@
     <h2>Tasks for Document: <?php echo htmlspecialchars($data['document']['name']); ?></h2>
 
     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-        <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/showCreateForm/<?php echo $data['document']['id']; ?>">Create New Task for this Document</a></p>
+        <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/showCreateForm/<?php echo $data['document']['id']; ?>">Create New Task for this Document</a></p>
     <?php endif; ?>
 
     <?php if (isset($data['tasks']) && !empty($data['tasks'])): ?>
@@ -29,9 +29,9 @@
                     <?php endif; ?>
                     <br>
                     <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-                        <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/showEditForm/<?php echo $task['id']; ?>">Edit</a> |
-                        <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/showAssignForm/<?php echo $task['id']; ?>">Assign</a> |
-                        <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/delete/<?php echo $task['id']; ?>/<?php echo $data['document']['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a> |
+                        <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/showEditForm/<?php echo $task['id']; ?>">Edit</a> |
+                        <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/showAssignForm/<?php echo $task['id']; ?>">Assign</a> |
+                        <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/delete/<?php echo $task['id']; ?>/<?php echo $data['document']['id']; ?>" onclick="return confirm('Are you sure you want to delete this task?');">Delete</a> |
                     <?php endif; ?>
 
                     <?php
@@ -39,16 +39,16 @@
                     ?>
                     <?php if ($canUpdate): ?>
                         <?php if ($task['status'] !== 'completed'): ?>
-                            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/completed/<?php echo $data['document']['id']; ?>/document">Mark Completed</a> |
+                            <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/completed/<?php echo $data['document']['id']; ?>/document">Mark Completed</a> |
                         <?php endif; ?>
                         <?php if ($task['status'] === 'completed' || $task['status'] === 'overdue'): ?>
-                            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/pending/<?php echo $data['document']['id']; ?>/document">Mark Pending</a> |
+                            <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/pending/<?php echo $data['document']['id']; ?>/document">Mark Pending</a> |
                         <?php endif; ?>
                          <?php if ($task['status'] === 'pending'): ?>
-                            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/in_progress/<?php echo $data['document']['id']; ?>/document">Mark In Progress</a> |
+                            <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/in_progress/<?php echo $data['document']['id']; ?>/document">Mark In Progress</a> |
                         <?php endif; ?>
                     <?php endif; ?>
-                    <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/showByEntity/task/<?php echo $task['id']; ?>">Comments</a>
+                    <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/task/<?php echo $task['id']; ?>">Comments</a>
                 </li>
                 <br>
             <?php endforeach; ?>
@@ -57,10 +57,10 @@
         <p>No tasks found for this document.</p>
     <?php endif; ?>
 
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/show/<?php echo $data['document']['accreditation_process_id']; ?>">Back to Process Details</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $data['document']['accreditation_process_id']; ?>">Back to Process Details</a></p>
 
 <?php else: ?>
     <p>Document information not found.</p>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/index">Go to Accreditation Processes</a></p>
 <?php endif; ?>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

@@ -4,21 +4,21 @@
     <ul>
         <?php foreach ($data['tasks'] as $task): ?>
             <li>
-                <strong>Process:</strong> <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/show/<?php echo $task['accreditation_process_id']; ?>"><?php echo htmlspecialchars($task['process_title']); ?></a><br>
-                <strong>Document:</strong> <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/show/<?php echo $task['accreditation_process_id']; ?>#doc<?php echo $task['document_id'];?>"><?php echo htmlspecialchars($task['document_name']); ?></a>
-                 ( <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/listByDocument/<?php echo $task['document_id']; ?>#task<?php echo $task['id'];?>">View all tasks for this doc</a> )<br>
+                <strong>Process:</strong> <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $task['accreditation_process_id']; ?>"><?php echo htmlspecialchars($task['process_title']); ?></a><br>
+                <strong>Document:</strong> <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $task['accreditation_process_id']; ?>#doc<?php echo $task['document_id'];?>"><?php echo htmlspecialchars($task['document_name']); ?></a>
+                 ( <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $task['document_id']; ?>#task<?php echo $task['id'];?>">View all tasks for this doc</a> )<br>
                 <strong>Task:</strong> <?php echo htmlspecialchars($task['description']); ?><br>
                 Status: <?php echo htmlspecialchars($task['status']); ?><br>
                 Due Date: <?php echo htmlspecialchars($task['due_date'] ?? 'N/A'); ?><br>
                 <?php if ($task['status'] !== 'completed'): ?>
-                    <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/completed/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark as Completed</a> |
+                    <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/completed/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark as Completed</a> |
                 <?php else: ?>
-                    <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/pending/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark as Pending</a> |
+                    <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/pending/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark as Pending</a> |
                 <?php endif; ?>
                  <?php if ($task['status'] === 'pending'): ?>
-                    <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/updateStatus/<?php echo $task['id']; ?>/in_progress/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark In Progress</a> |
+                    <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/updateStatus/<?php echo $task['id']; ?>/in_progress/<?php echo $_SESSION['user_id']; ?>/mytasks">Mark In Progress</a> |
                 <?php endif; ?>
-                 <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/showByEntity/task/<?php echo $task['id']; ?>">Comments</a>
+                 <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/task/<?php echo $task['id']; ?>">Comments</a>
             </li>
             <br>
         <?php endforeach; ?>

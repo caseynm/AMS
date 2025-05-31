@@ -10,7 +10,7 @@
     <hr>
     <h3>Documents for this Process</h3>
     <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-        <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=document/showCreateForm/<?php echo $data['process']['id']; ?>">Add New Document</a></p>
+        <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/showCreateForm/<?php echo $data['process']['id']; ?>">Add New Document</a></p>
     <?php endif; ?>
     <?php if (isset($data['documents']) && !empty($data['documents'])): ?>
         <ul>
@@ -18,12 +18,12 @@
                 <li id="doc<?php echo $doc['id'];?>">
                     <a href="<?php echo htmlspecialchars($doc['onedrive_url'] ?? '#'); ?>" target="_blank"><?php echo htmlspecialchars($doc['name']); ?></a>
                     (Status: <?php echo htmlspecialchars($doc['status']); ?>)
-                    | <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/listByDocument/<?php echo $doc['id']; ?>">View/Manage Tasks</a>
+                    | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $doc['id']; ?>">View/Manage Tasks</a>
                     <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-                        | <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=document/showEditForm/<?php echo $doc['id']; ?>">Edit Doc</a>
-                        | <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=document/delete/<?php echo $doc['id']; ?>/<?php echo $data['process']['id']; ?>" onclick="return confirm('Are you sure you want to delete this document and all its tasks?');">Delete Doc</a>
+                        | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/showEditForm/<?php echo $doc['id']; ?>">Edit Doc</a>
+                        | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/delete/<?php echo $doc['id']; ?>/<?php echo $data['process']['id']; ?>" onclick="return confirm('Are you sure you want to delete this document and all its tasks?');">Delete Doc</a>
                     <?php endif; ?>
-                     | <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/showByEntity/document/<?php echo $doc['id']; ?>">Comments</a>
+                     | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/document/<?php echo $doc['id']; ?>">Comments</a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -33,9 +33,9 @@
 
     <hr>
     <h3>Comments for this Process</h3>
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/showByEntity/process/<?php echo $data['process']['id']; ?>">View/Add Comments for Process</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/process/<?php echo $data['process']['id']; ?>">View/Add Comments for Process</a></p>
 
-    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Back to All Processes</a></p>
+    <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/index">Back to All Processes</a></p>
 <?php else: ?>
     <p>Accreditation process not found.</p>
 <?php endif; ?>

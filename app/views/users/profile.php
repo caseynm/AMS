@@ -7,5 +7,5 @@
 <?php else: ?>
     <p>User information not found.</p>
 <?php endif; ?>
-<p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/logout">Logout</a></p>
+<p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/logout">Logout</a></p>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
