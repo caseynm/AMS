@@ -36,7 +36,7 @@ class AccreditationController extends BaseController {
         }
 
         // Fetch documents related to this process
-        $documents = $this->documentModel->getDocumentsByProcessId($id);
+        $documents = $this->documentModel->getFilledDocumentsByProcessId($id);
 
         $this->renderView('accreditations/show', [
             'process' => $process,
