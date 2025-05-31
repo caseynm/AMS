@@ -1,5 +1,5 @@
 </main> <!-- closes .container -->
-<footer class="bg-brand-dark text-gray-400 text-center p-4 mt-8">
+<footer class="bg-white border-t border-black text-black text-center py-4 mt-auto">
     <p>&copy; <?php echo date("Y"); ?> Ashesi University - AMS</p>
 </footer>
 <script>
