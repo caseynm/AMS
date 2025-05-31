@@ -15,6 +15,6 @@
     <p>No users found.</p>
 <?php endif; ?>
 <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-    <p><a href="/index.php?url=user/showRegistrationForm">Add New User</a></p>
+    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/showRegistrationForm">Add New User</a></p>
 <?php endif; ?>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

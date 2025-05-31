@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../app/config/config.php';
 session_start();
 
 // Basic routing logic (will be expanded)

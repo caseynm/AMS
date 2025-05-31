@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accreditation Management System</title>
-    <link rel="stylesheet" href="/css/style.css"> <!-- Assuming public/css/style.css -->
+    <link rel="stylesheet" href="<?php echo htmlspecialchars($BASE_PATH); ?>css/style.css">
 </head>
 <body>
 <header>
-    <h1><a href="/index.php?url=home/index" style="color:white;text-decoration:none;">Accreditation Management System</a></h1>
+    <h1><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=home/index" style="color:white;text-decoration:none;">Accreditation Management System</a></h1>
     <nav>
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="/index.php?url=user/profile">Profile</a> |
-            <a href="/index.php?url=accreditation/index">Processes</a> |
-            <a href="/index.php?url=task/myTasks">My Tasks</a> |
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/profile">Profile</a> |
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=accreditation/index">Processes</a> |
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=task/myTasks">My Tasks</a> |
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-                <a href="/index.php?url=user/listUsers">Users</a> |
+                <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/listUsers">Users</a> |
             <?php endif; ?>
-            <a href="/index.php?url=user/logout">Logout</a>
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/logout">Logout</a>
         <?php else: ?>
-            <a href="/index.php?url=user/showLoginForm">Login</a> |
-            <a href="/index.php?url=user/showRegistrationForm">Register</a>
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/showLoginForm">Login</a> |
+            <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=user/showRegistrationForm">Register</a>
         <?php endif; ?>
     </nav>
 </header>

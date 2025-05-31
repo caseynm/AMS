@@ -39,7 +39,11 @@ class BaseController {
         // Assuming index.php is at the web root for these links.
         // If AMS is in a subfolder like /ams/, this needs to be /ams/index.php?...
         // For now, keeping it simple as /index.php...
-        $final_url = "/" . ltrim($base_url . $url_path_with_query, '/');
+        // $final_url = "/" . ltrim($base_url . $url_path_with_query, '/');
+        // Prepend BASE_PATH, ensuring no double slashes
+        $path_part = ltrim($base_url . $url_path_with_query, '/');
+        $final_url = rtrim(BASE_PATH, '/') . '/' . $path_part;
+
 
         header("Location: " . $final_url);
         exit;
@@ -61,6 +65,11 @@ class BaseController {
             }
             $sanitized_data[$key] = $value; // Further sanitization (e.g. htmlspecialchars) should happen IN THE VIEW for output
         }
+
+        // Add BASE_PATH to be available in views
+        // Added after sanitization loop to avoid conflict with protected keys,
+        // assuming BASE_PATH itself is a safe, defined constant.
+        $sanitized_data['BASE_PATH'] = BASE_PATH;
 
         extract($sanitized_data);
 

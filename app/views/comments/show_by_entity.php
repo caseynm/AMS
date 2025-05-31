@@ -11,7 +11,7 @@
                     <em>(<?php echo htmlspecialchars(date("M d, Y H:i", strtotime($comment['created_at']))); ?>)</em>:
                     <p><?php echo nl2br(htmlspecialchars($comment['comment_text'])); ?></p>
                     <?php if (isset($_SESSION['user_id']) && ( (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser') || $_SESSION['user_id'] == $comment['user_id'])): ?>
-                        <a href="/index.php?url=comment/delete/<?php echo $comment['id']; ?>/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" onclick="return confirm('Are you sure you want to delete this comment?');">Delete Comment</a>
+                        <a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/delete/<?php echo $comment['id']; ?>/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" onclick="return confirm('Are you sure you want to delete this comment?');">Delete Comment</a>
                     <?php endif; ?>
                 </li>
             <?php endforeach; ?>
@@ -21,17 +21,17 @@
     <?php endif; ?>
 
     <h4>Add a New Comment:</h4>
-    <form action="/index.php?url=comment/create/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" method="POST">
+    <form action="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=comment/create/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" method="POST">
         <div>
             <textarea name="comment_text" rows="4" style="width:80%;" required></textarea>
         </div>
         <button type="submit">Submit Comment</button>
     </form>
     <br>
-    <p><a href="<?php echo htmlspecialchars($data['back_link']); ?>">Back to <?php echo htmlspecialchars($data['entity_type_display']); ?></a></p>
+    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=<?php echo htmlspecialchars($data['back_link']); ?>">Back to <?php echo htmlspecialchars($data['entity_type_display']); ?></a></p>
 <?php else: ?>
     <p>Error: Entity information for comments is missing.</p>
-    <p><a href="/index.php?url=home/index">Return to Dashboard</a></p>
+    <p><a href="<?php echo htmlspecialchars($BASE_PATH); ?>index.php?url=home/index">Return to Dashboard</a></p>
 <?php endif; ?>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
