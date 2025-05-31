@@ -7,7 +7,7 @@ class HomeController extends BaseController {
     private $accreditationProcessModel;
 
     public function __construct() {
-        parent::__construct(); // Call BaseController constructor if any setup is needed there
+        // parent::__construct(); // Call BaseController constructor if any setup is needed there
         $this->accreditationProcessModel = new AccreditationProcess();
     }
 
