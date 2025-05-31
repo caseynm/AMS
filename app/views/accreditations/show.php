@@ -25,22 +25,22 @@
     <hr class="border-gray-700 my-6">
 
     <div>
-        <h3 class="text-2xl font-semibold text-gray-200 mb-4">Documents for this Process</h3>
-        <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-            <p class="mb-4"><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/showCreateForm/<?php echo $data['process']['id']; ?>" class="inline-block bg-neon-purple text-white hover:bg-purple-700 font-bold py-2 px-4 rounded transition-colors duration-300"><i class="fas fa-file-plus mr-2"></i> Add New Document</a></p>
-        <?php endif; ?>
+        <h3 class="text-2xl font-semibold text-gray-200 mb-4">Filled Documents for this Process</h3>
+        <?php // Link to select a template to fill for this process. Accessible by any logged-in user. ?>
+        <p class="mb-4"><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/selectTemplate/<?php echo $data['process']['id']; ?>" class="inline-block bg-neon-purple text-white hover:bg-purple-700 font-bold py-2 px-4 rounded transition-colors duration-300"><i class="fas fa-file-alt mr-2"></i> Create New Document from Template</a></p>
+
         <?php if (isset($data['documents']) && !empty($data['documents'])): ?>
             <ul class="space-y-3">
                 <?php foreach ($data['documents'] as $doc): ?>
                     <li id="doc<?php echo $doc['id'];?>" class="bg-brand-dark p-4 rounded-lg shadow hover:shadow-neon-purple/20 transition-shadow duration-300 flex justify-between items-center">
                         <div>
-                            <a href="<?php echo htmlspecialchars($doc['onedrive_url'] ?? '#'); ?>" target="_blank" class="text-lg font-medium text-blue-400 hover:text-blue-300"><?php echo htmlspecialchars($doc['name']); ?></a>
-                            <span class="text-sm text-gray-500 ml-2">(Status: <?php echo htmlspecialchars($doc['status']); ?>)</span>
+                            <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/view/<?php echo $doc['id']; ?>" class="text-lg font-medium text-blue-400 hover:text-blue-300"><?php echo htmlspecialchars($doc['name']); ?></a>
+                            <span class="text-sm text-gray-500 ml-2">(Template: <?php echo htmlspecialchars($doc['template_name']); ?> - Status: <?php echo htmlspecialchars(ucfirst($doc['status'])); ?>)</span>
                         </div>
                         <div class="space-x-3 whitespace-nowrap">
                             <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $doc['id']; ?>" class="text-green-400 hover:text-green-300"><i class="fas fa-tasks mr-1"></i> Tasks</a>
-                            <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
-                                <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/showEditForm/<?php echo $doc['id']; ?>" class="text-yellow-400 hover:text-yellow-300"><i class="fas fa-edit mr-1"></i> Edit</a>
+                            <?php if ($doc['user_id'] == ($_SESSION['user_id'] ?? null) || (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser')): ?>
+                                <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/edit/<?php echo $doc['id']; ?>" class="text-yellow-400 hover:text-yellow-300"><i class="fas fa-edit mr-1"></i> Edit</a>
                                 <a href="#" data-href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/delete/<?php echo $doc['id']; ?>/<?php echo $data['process']['id']; ?>" data-message="Are you sure you want to delete this document and all its tasks? This action cannot be undone." class="delete-confirm-link text-red-400 hover:text-red-300"><i class="fas fa-trash-alt mr-1"></i> Delete</a>
                             <?php endif; ?>
                              <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/document/<?php echo $doc['id']; ?>" class="text-gray-500 hover:text-gray-300"><i class="fas fa-comments mr-1"></i> Comments</a>
