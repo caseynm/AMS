@@ -6,7 +6,7 @@ class UserController extends BaseController {
     private $userModel;
 
     public function __construct() {
-        parent::__construct();
+        // parent::__construct();
         $this->userModel = new User();
     }
 

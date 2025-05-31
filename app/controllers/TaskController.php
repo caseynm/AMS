@@ -10,7 +10,7 @@ class TaskController extends BaseController {
     private $userModel;
 
     public function __construct() {
-        parent::__construct();
+        // parent::__construct();
         $this->taskModel = new Task();
         $this->documentModel = new Document();
         $this->userModel = new User();

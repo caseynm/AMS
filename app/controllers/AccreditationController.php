@@ -8,7 +8,7 @@ class AccreditationController extends BaseController {
     private $documentModel;
 
     public function __construct() {
-        parent::__construct();
+        // parent::__construct();
         $this->accreditationProcessModel = new AccreditationProcess();
         $this->documentModel = new Document(); // Initialize DocumentModel
     }

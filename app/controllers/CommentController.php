@@ -12,7 +12,7 @@ class CommentController extends BaseController {
     private $taskModel;
 
     public function __construct() {
-        parent::__construct();
+        // parent::__construct();
         $this->commentFeedbackModel = new CommentFeedback();
         $this->accreditationProcessModel = new AccreditationProcess();
         $this->documentModel = new Document();
