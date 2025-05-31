@@ -1,7 +1,7 @@
 <?php
 define('DB_HOST', 'localhost');
-define('DB_USER', 'ams_user');
-define('DB_PASS', 'password'); // Please change this password
+define('DB_USER', 'root');
+define('DB_PASS', ''); // Please change this password
 define('DB_NAME', 'ams_db');
 
 // Create a PDO database connection
