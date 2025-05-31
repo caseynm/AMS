@@ -246,37 +246,76 @@ class TaskController extends BaseController {
     // Update task status (e.g., mark as complete by assigned user or superuser)
     // Route: task/updateStatus/{task_id}/{new_status}/{context_id_for_redirect}/{redirect_context}
     public function updateStatus($task_id, $new_status, $context_id, $redirect_context = 'document') {
+        $is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
         if (!$this->isLoggedIn()) {
+            if ($is_ajax) {
+                header('Content-Type: application/json');
+                http_response_code(401); // Unauthorized
+                echo json_encode(['success' => false, 'message' => 'Login required.']);
+                exit;
+            }
             $this->redirect('user/showLoginForm&error=Login_required');
             return;
         }
 
         $task = $this->taskModel->getTaskById($task_id);
         if (!$task) {
+            if ($is_ajax) {
+                header('Content-Type: application/json');
+                http_response_code(404); // Not Found
+                echo json_encode(['success' => false, 'message' => 'Task not found.']);
+                exit;
+            }
             $this->redirect('home/index&error=Task_not_found_ID_' . $task_id);
             return;
         }
 
         if (!($this->isTaskAssignedToCurrentUser($task_id) || $this->isSuperUser())) {
-             $redirect_url = ($redirect_context === 'document') ? 'task/listByDocument/' . $context_id : 'task/myTasks';
+            if ($is_ajax) {
+                header('Content-Type: application/json');
+                http_response_code(403); // Forbidden
+                echo json_encode(['success' => false, 'message' => 'Not authorized to update this task.']);
+                exit;
+            }
+            $redirect_url = ($redirect_context === 'document') ? 'task/listByDocument/' . $context_id : 'task/myTasks';
             $this->redirect($redirect_url . '&error=Not_authorized_to_update_task_status');
             return;
         }
 
         $allowed_statuses = ['pending', 'in_progress', 'completed', 'overdue'];
         if (!in_array($new_status, $allowed_statuses)) {
+            if ($is_ajax) {
+                header('Content-Type: application/json');
+                http_response_code(400); // Bad Request
+                echo json_encode(['success' => false, 'message' => 'Invalid task status provided.']);
+                exit;
+            }
             $redirect_url = ($redirect_context === 'document') ? 'task/listByDocument/' . $context_id : 'task/myTasks';
             $this->redirect($redirect_url . '&error=Invalid_task_status_' . $new_status);
             return;
         }
 
         $success = $this->taskModel->updateTaskStatus($task_id, $new_status);
-        $redirect_url_base = ($redirect_context === 'document') ? "task/listByDocument/" . $context_id : "task/myTasks";
+        $message = $success ? "Task status updated to " . htmlspecialchars($new_status) . "." : "Could not update task status.";
 
-        if ($success) {
-            $this->redirect($redirect_url_base . "&success=Task_status_updated_to_" . $new_status . "#task".$task_id);
+        if ($is_ajax) {
+            header('Content-Type: application/json');
+            if ($success) {
+                echo json_encode(['success' => true, 'message' => $message, 'new_status' => $new_status, 'task_id' => (int)$task_id]);
+            } else {
+                http_response_code(500); // Internal Server Error
+                echo json_encode(['success' => false, 'message' => $message, 'task_id' => (int)$task_id]);
+            }
+            exit;
         } else {
-            $this->redirect($redirect_url_base . "&error=Could_not_update_task_status_DB_error" . "#task".$task_id);
+            // Non-AJAX: Redirect as before
+            $redirect_url_base = ($redirect_context === 'document') ? "task/listByDocument/" . $context_id : "task/myTasks";
+            if ($success) {
+                $this->redirect($redirect_url_base . "&success=" . urlencode($message) . "#task".$task_id);
+            } else {
+                $this->redirect($redirect_url_base . "&error=" . urlencode($message) . "#task".$task_id);
+            }
         }
     }
 

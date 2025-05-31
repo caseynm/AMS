@@ -5,8 +5,8 @@
     <p><strong>For Document:</strong> <?php echo htmlspecialchars($data['task']['document_name']); ?></p>
     <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/assign/<?php echo $data['task']['id']; ?>" method="POST">
         <div>
-            <label for="user_ids">Select Users (Ctrl/Cmd + Click for multiple):</label>
-            <select id="user_ids" name="user_ids[]" multiple size="10">
+            <label for="select-users-assign">Select Users (Ctrl/Cmd + Click for multiple):</label>
+            <select id="select-users-assign" name="user_ids[]" multiple style="width: 100%;">
                 <?php foreach ($data['allUsers'] as $user): ?>
                     <option value="<?php echo $user['id']; ?>" <?php echo in_array($user['id'], $data['assignedUserIds']) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($user['name']) . " (" . htmlspecialchars($user['email']) . ")"; ?>

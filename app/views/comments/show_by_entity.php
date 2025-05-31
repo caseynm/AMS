@@ -4,14 +4,14 @@
     <h3>Comments/Feedback for <?php echo htmlspecialchars($data['entity_type_display']); ?>: "<?php echo htmlspecialchars($data['entity_name_display']); ?>"</h3>
 
     <?php if (isset($data['comments']) && !empty($data['comments'])): ?>
-        <ul id="comments-list">
+        <ul id="comments-list-container">
             <?php foreach ($data['comments'] as $comment): ?>
                 <li>
                     <strong><?php echo htmlspecialchars($comment['user_name'] ?? 'Anonymous'); ?></strong>
                     <em>(<?php echo htmlspecialchars(date("M d, Y H:i", strtotime($comment['created_at']))); ?>)</em>:
                     <p><?php echo nl2br(htmlspecialchars($comment['comment_text'])); ?></p>
                     <?php if (isset($_SESSION['user_id']) && ( (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser') || $_SESSION['user_id'] == $comment['user_id'])): ?>
-                        <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/delete/<?php echo $comment['id']; ?>/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" onclick="return confirm('Are you sure you want to delete this comment?');">Delete Comment</a>
+                        <a href="#" data-href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/delete/<?php echo $comment['id']; ?>/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" data-message="Are you sure you want to delete this comment?" class="delete-confirm-link">Delete Comment</a>
                     <?php endif; ?>
                 </li>
             <?php endforeach; ?>
@@ -21,7 +21,7 @@
     <?php endif; ?>
 
     <h4>Add a New Comment:</h4>
-    <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/create/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" method="POST">
+    <form id="ajax-comment-form" action="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/create/<?php echo $data['entity_type']; ?>/<?php echo $data['entity_id']; ?>" method="POST">
         <div>
             <textarea name="comment_text" rows="4" style="width:80%;" required></textarea>
         </div>

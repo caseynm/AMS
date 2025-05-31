@@ -21,7 +21,7 @@
                     | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>task/listByDocument/<?php echo $doc['id']; ?>">View/Manage Tasks</a>
                     <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'superuser'): ?>
                         | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/showEditForm/<?php echo $doc['id']; ?>">Edit Doc</a>
-                        | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/delete/<?php echo $doc['id']; ?>/<?php echo $data['process']['id']; ?>" onclick="return confirm('Are you sure you want to delete this document and all its tasks?');">Delete Doc</a>
+                        | <a href="#" data-href="<?php echo htmlspecialchars($APP_BASE_URL); ?>document/delete/<?php echo $doc['id']; ?>/<?php echo $data['process']['id']; ?>" data-message="Are you sure you want to delete this document and all its tasks? This action cannot be undone." class="delete-confirm-link">Delete Doc</a>
                     <?php endif; ?>
                      | <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>comment/showByEntity/document/<?php echo $doc['id']; ?>">Comments</a>
                 </li>

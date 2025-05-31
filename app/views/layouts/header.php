@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accreditation Management System</title>
     <link rel="stylesheet" href="<?php echo htmlspecialchars($APP_BASE_URL); ?>public/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 <header>
@@ -25,12 +26,3 @@
     </nav>
 </header>
 <main class="container"> <!-- Added a container class for basic centering/padding -->
-<?php
-// Display messages if any (e.g., success or error)
-if (isset($_GET['error'])) {
-    echo '<p style="color:red;">Error: ' . htmlspecialchars($_GET['error']) . '</p>';
-}
-if (isset($_GET['success'])) {
-    echo '<p style="color:green;">Success: ' . htmlspecialchars($_GET['success']) . '</p>';
-}
-?>

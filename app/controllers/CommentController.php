@@ -75,12 +75,24 @@ class CommentController extends BaseController {
 
     public function create($entity_type, $entity_id) {
         if (!$this->isLoggedIn()) {
+            if ($this->isAjaxRequest()) {
+                header('Content-Type: application/json');
+                http_response_code(401); // Unauthorized
+                echo json_encode(['success' => false, 'message' => 'Login required to comment.']);
+                exit;
+            }
             $this->redirect('user/showLoginForm&error=Login_required');
             return;
         }
 
         $entityDetails = $this->getEntityDetails($entity_type, $entity_id);
         if (!$entityDetails) {
+             if ($this->isAjaxRequest()) {
+                header('Content-Type: application/json');
+                http_response_code(404); // Not Found
+                echo json_encode(['success' => false, 'message' => 'Entity to comment on not found.']);
+                exit;
+            }
             $this->redirect('home/index&error=Invalid_entity_for_creating_comment');
             return;
         }
@@ -88,8 +100,15 @@ class CommentController extends BaseController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $comment_text = trim($_POST['comment_text'] ?? '');
             $user_id = $_SESSION['user_id'];
+            $user_name = $_SESSION['user_name'] ?? 'User'; // For immediate display in AJAX response
 
             if (empty($comment_text)) {
+                if ($this->isAjaxRequest()) {
+                    header('Content-Type: application/json');
+                    http_response_code(400); // Bad Request
+                    echo json_encode(['success' => false, 'message' => 'Comment text cannot be empty.']);
+                    exit;
+                }
                 $this->redirect("comment/showByEntity/" . $entity_type . "/" . $entity_id . "&error=Comment_text_cannot_be_empty");
                 return;
             }
@@ -97,11 +116,42 @@ class CommentController extends BaseController {
             $commentId = $this->commentFeedbackModel->addComment($entity_type, $entity_id, $user_id, $comment_text);
 
             if ($commentId) {
+                if ($this->isAjaxRequest()) {
+                    header('Content-Type: application/json');
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Comment added successfully!',
+                        'comment' => [
+                            'id' => $commentId,
+                            'comment_text' => htmlspecialchars($comment_text), // Sanitize for display
+                            'user_name' => htmlspecialchars($user_name),
+                            'created_at' => date("M d, Y H:i"), // Format for display
+                            'user_id' => $user_id,
+                            'entity_type' => $entity_type,
+                            'entity_id' => (int)$entity_id
+                        ]
+                    ]);
+                    exit;
+                }
                 $this->redirect("comment/showByEntity/" . $entity_type . "/" . $entity_id . "&success=Comment_added_successfully");
             } else {
-                $this->redirect("comment/showByEntity/" . $entity_type . "/" . $entity_id . "&error=Could_not_add_comment_DB_error");
+                $errorMessage = 'Could not add comment due to a server error.';
+                if ($this->isAjaxRequest()) {
+                    header('Content-Type: application/json');
+                    http_response_code(500); // Internal Server Error
+                    echo json_encode(['success' => false, 'message' => $errorMessage]);
+                    exit;
+                }
+                $this->redirect("comment/showByEntity/" . $entity_type . "/" . $entity_id . "&error=" . urlencode($errorMessage));
             }
         } else {
+            // Not a POST request
+            if ($this->isAjaxRequest()) {
+                 header('Content-Type: application/json');
+                 http_response_code(405); // Method Not Allowed
+                 echo json_encode(['success' => false, 'message' => 'POST method required.']);
+                 exit;
+            }
             $this->redirect("comment/showByEntity/" . $entity_type . "/" . $entity_id);
         }
     }
