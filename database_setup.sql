@@ -1,14 +1,14 @@
 -- SQL Schema for Accreditation Management System
 
 -- Users Table
-CREATE TABLE `users` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `password` VARCHAR(255) NOT NULL,
-    `role` ENUM('superuser', 'regular') NOT NULL DEFAULT 'regular',
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  `role` ENUM('superuser', 'regular') NOT NULL DEFAULT 'regular',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Accreditation Processes Table
 CREATE TABLE `accreditation_processes` (
@@ -64,17 +64,20 @@ CREATE TABLE `task_assignments` (
 );
 
 -- Comments/Feedback Table
-CREATE TABLE `comments_feedback` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
-    `entity_type` ENUM('process', 'document', 'task') NOT NULL,
-    `entity_id` INT NOT NULL, -- Refers to ID in accreditation_processes, documents, or tasks
-    `user_id` INT NOT NULL,
-    `comment_text` TEXT NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL -- Keep comment if user is deleted, or use CASCADE if preferred
-    -- Note: No direct foreign key on entity_id due to polymorphism. This will be handled by application logic.
-    -- Adding indexes for faster lookups based on entity
-);
+CREATE TABLE IF NOT EXISTS `comments_feedback` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `entity_type` ENUM('process', 'document', 'task') NOT NULL,
+  `entity_id` INT NOT NULL,
+  `user_id` INT NOT NULL, -- Ensure this matches users.id type (INT, signed)
+  `comment_text` TEXT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX `idx_entity` (`entity_type`, `entity_id`),
+  CONSTRAINT `fk_comment_user`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Indexes for common lookups
 CREATE INDEX `idx_accreditation_processes_status` ON `accreditation_processes`(`status`);
@@ -84,8 +87,9 @@ CREATE INDEX `idx_tasks_document_id` ON `tasks`(`document_id`);
 CREATE INDEX `idx_tasks_status` ON `tasks`(`status`);
 CREATE INDEX `idx_task_assignments_task_id` ON `task_assignments`(`task_id`);
 CREATE INDEX `idx_task_assignments_user_id` ON `task_assignments`(`user_id`);
-CREATE INDEX `idx_comments_feedback_entity` ON `comments_feedback`(`entity_type`, `entity_id`);
-CREATE INDEX `idx_comments_feedback_user_id` ON `comments_feedback`(`user_id`);
+-- Index idx_comments_feedback_entity is already created by the new comments_feedback table definition.
+-- CREATE INDEX `idx_comments_feedback_entity` ON `comments_feedback`(`entity_type`, `entity_id`);
+CREATE INDEX `idx_comments_feedback_user_id` ON `comments_feedback`(`user_id`); -- This one is still needed if not covered by FK. MySQL usually indexes FKs.
 
 -- Example of how to add a user (password should be hashed by the application)
 -- INSERT INTO `users` (`name`, `email`, `password`, `role`) VALUES
@@ -151,19 +155,13 @@ ALTER TABLE `tasks` ADD INDEX `idx_task_created_by_user_id` (`created_by_user_id
 -- However, this can also be handled by the application when an entity is deleted.
 -- For now, ON DELETE CASCADE is used for direct, hierarchical relationships.
 -- The relationship between comments_feedback and the entities it refers to is polymorphic and handled at the app level.
--- If a user is deleted, their comments are kept (ON DELETE SET NULL for user_id in comments_feedback).
+-- If a user is deleted, their comments are now DELETED due to ON DELETE CASCADE on comments_feedback.user_id.
+-- This is a change from the previous ON DELETE SET NULL.
 -- If an accreditation_process is deleted, its documents are deleted (CASCADE), which in turn deletes tasks (CASCADE), which then deletes task_assignments (CASCADE).
--- Comments related to these deleted entities would need to be cleaned up by the application or via triggers as described above.
--- For simplicity in this initial script, such triggers are noted but not implemented.
--- The current setup for comments_feedback.user_id is ON DELETE SET NULL.
--- This means if a user is deleted, their comments remain, attributed to a NULL user.
--- If you prefer to delete comments when a user is deleted, change to ON DELETE CASCADE.
--- The choice depends on data retention policies.
+-- Comments related to these deleted entities would need to be cleaned up by the application or via triggers as described above, unless the entity deletion itself triggers comment deletion (not directly via FK).
 -- Foreign keys for created_by_user_id in accreditation_processes, documents, and tasks are set to ON DELETE SET NULL.
 -- This means if a user who created these entities is deleted, the entities themselves are not deleted, but their creator is marked as NULL.
 -- This is often a preferred approach to avoid accidental data loss.
--- If these entities should be deleted when their creator is deleted, change to ON DELETE CASCADE.
--- This is generally less common for "created_by" relationships.
 -- Task_assignments are deleted if either the task or the assigned user is deleted (ON DELETE CASCADE for both task_id and user_id).
 -- This makes sense as an assignment is meaningless without both.
 -- The UNIQUE KEY on task_assignments (task_id, user_id) prevents duplicate assignments.
@@ -172,7 +170,7 @@ ALTER TABLE `tasks` ADD INDEX `idx_task_created_by_user_id` (`created_by_user_id
 -- Timestamps for created_at and updated_at help in tracking data changes.
 -- `updated_at` for `accreditation_processes`, `documents`, and `tasks` automatically updates when the row is modified.
 -- `onedrive_url` in `documents` is VARCHAR(1024) to accommodate potentially long URLs.
--- The database character set and collation are not specified here but should be UTF-8 (e.g., utf8mb4_unicode_ci) for broad language support.
+-- The database character set and collation are now specified as utf8mb4 for broader language support.
 -- This script assumes a MySQL-compatible database. Syntax might vary slightly for other SQL databases.
 -- Final check of table names and column names for consistency.
 -- All primary keys are `id` INT AUTO_INCREMENT.
@@ -184,20 +182,21 @@ ALTER TABLE `tasks` ADD INDEX `idx_task_created_by_user_id` (`created_by_user_id
 -- Unique constraint on users.email is critical.
 -- The script includes example INSERT statements (commented out) for guidance.
 -- The note about polymorphic association for comments_feedback.entity_id is important.
--- The script is structured to be run multiple times if needed (CREATE TABLE without IF NOT EXISTS, so it will fail if tables exist).
--- For development, `CREATE TABLE IF NOT EXISTS` could be used, or a separate `DROP TABLE IF EXISTS ...` script.
--- For production, migrations tools often handle schema changes more robustly.
+-- The script now uses `CREATE TABLE IF NOT EXISTS` for users and comments_feedback.
+-- For development, this is helpful. For production, migrations tools are better.
 -- Added indexes to foreign key columns explicitly, although some DB systems do this automatically.
 -- E.g., idx_ap_created_by_user_id, idx_doc_uploaded_by_user_id, idx_task_created_by_user_id.
 -- This ensures these critical joins are optimized.
--- The default for `comments_feedback.user_id` ON DELETE SET NULL is a reasonable choice to preserve comment history even if a user account is removed.
--- If the business rule was "comments must be deleted if the commenting user is deleted", then ON DELETE CASCADE would be used.
+-- The comments_feedback.user_id foreign key is now ON DELETE CASCADE. This is a significant change: if a user is deleted, all their comments will be deleted.
 -- The cascading deletes from accreditation_processes -> documents -> tasks -> task_assignments is a strong chain.
 -- Deleting an accreditation process will clean up all its related data down this hierarchy.
--- Comments related to these entities are not automatically cleaned by these direct cascades due to the polymorphic nature.
--- This is a common pattern: core hierarchical data is cleaned by DB FKs, while more loosely coupled or polymorphic relations
--- (like comments, tags, audit logs) might require application-level cleanup or database triggers.
 -- The length of VARCHAR for `status` (50) should be sufficient for descriptive status texts.
 -- `description` fields are TEXT for longer content.
 -- `start_date` and `end_date` are DATE type, suitable for just dates without time.
 -- `onedrive_url` is nullable as a document might exist in the system before its file is uploaded or if it's a physical document.
+-- The ENGINE=InnoDB and DEFAULT CHARSET settings are now explicitly part of the `users` and `comments_feedback` table definitions.
+-- It would be good practice to add these to ALL table definitions for consistency.
+-- The index `idx_comments_feedback_entity` is now part of the `CREATE TABLE comments_feedback` statement.
+-- The index `idx_comments_feedback_user_id` is still relevant as a separate statement if the FK doesn't automatically create a usable index for all query types, though often it does. Given it's explicitly part of the `CONSTRAINT fk_comment_user`, it's likely indexed.
+-- For consistency, other tables could also be defined with `IF NOT EXISTS`.
+-- The change from `ON DELETE SET NULL` to `ON DELETE CASCADE` for `comments_feedback.user_id` is a key policy change regarding data retention for comments.
