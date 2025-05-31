@@ -9,7 +9,7 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
     </div>
-    <button type="submit">Login</button>
+    <button type="submit" class="bg-neon-purple text-white hover:bg-purple-700 font-bold py-2 px-4 rounded transition-colors"><i class="fas fa-sign-in-alt mr-2"></i> Login</button>
 </form>
-<p>Don't have an account? <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/showRegistrationForm">Register here</a>.</p>
+<p>Don't have an account? <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/showRegistrationForm" class="text-neon-purple hover:text-purple-400">Register here</a>.</p>
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>

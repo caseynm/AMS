@@ -15,9 +15,9 @@
         <input type="text" id="status" name="status" value="<?php echo htmlspecialchars($data['document']['status']); ?>">
     </div>
     <input type="hidden" name="process_id" value="<?php echo $data['document']['accreditation_process_id']; ?>">
-    <button type="submit">Update Document</button>
+    <button type="submit" class="bg-neon-purple text-white hover:bg-purple-700 font-bold py-2 px-4 rounded transition-colors"><i class="fas fa-save mr-2"></i> Update Document</button>
 </form>
-<p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $data['document']['accreditation_process_id']; ?>#doc<?php echo $data['document']['id']; ?>">Back to Process Details</a></p>
+<p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>accreditation/show/<?php echo $data['document']['accreditation_process_id']; ?>#doc<?php echo $data['document']['id']; ?>" class="text-blue-400 hover:text-blue-600 mt-4 inline-block"><i class="fas fa-arrow-left mr-2"></i>Back to Process Details</a></p>
 <?php else: ?>
     <p>Document not found.</p>
     <p><a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>index.php?url=accreditation/index">Go to Accreditation Processes</a></p>

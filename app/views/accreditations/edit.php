@@ -22,7 +22,7 @@
         <label for="status">Status:</label>
         <input type="text" id="status" name="status" value="<?php echo htmlspecialchars($data['process']['status']); ?>">
     </div>
-    <button type="submit">Update Process</button>
+    <button type="submit" class="bg-neon-purple text-white hover:bg-purple-700 font-bold py-2 px-4 rounded transition-colors"><i class="fas fa-save mr-2"></i> Update Process</button>
 </form>
 <?php else: ?>
     <p>Process not found.</p>

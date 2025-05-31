@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add custom base styles or component classes here later if needed */
+body {
+  @apply bg-brand-dark text-gray-300; /* Main dark background and default light text */
+  /* Add any other global base styles here, e.g., font family if desired */
+  /* font-family: 'Inter', sans-serif; (ensure font is imported if using custom) */
+}
