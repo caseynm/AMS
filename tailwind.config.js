@@ -7,9 +7,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'neon-purple': '#C026D3', // Example Neon Purple
-        'brand-dark': '#1a1a1a',  // A very dark gray, near black
-        'brand-gray': '#2d2d2d', // A slightly lighter dark gray
+        // 'neon-purple': '#C026D3', // Example Neon Purple
+        // 'brand-dark': '#1a1a1a',  // A very dark gray, near black
+        // 'brand-gray': '#2d2d2d', // A slightly lighter dark gray
       }
     },
   },

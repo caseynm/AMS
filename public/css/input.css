@@ -4,6 +4,6 @@
 
 /* You can add custom base styles or component classes here later if needed */
 body {
-  @apply bg-white text-black;
-  /* Add any other global base styles here */
+  @apply bg-gray-100 text-gray-900; /* Light gray background, dark text */
+  /* font-family: 'Inter', sans-serif; (Example, ensure font is available if used) */
 }

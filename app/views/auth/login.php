@@ -1,41 +1,17 @@
 <?php require_once __DIR__ . '/../layouts/header.php'; ?>
-
-<div class="min-h-screen flex flex-col items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold text-center text-black mb-6">Login</h2>
-
-        <!-- Placeholder for error/success messages -->
-        <?php if (isset($_GET['error'])): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                <?php echo htmlspecialchars(urldecode($_GET['error'])); ?>
-            </div>
-        <?php endif; ?>
-        <?php if (isset($_GET['success'])): ?>
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
-                <?php echo htmlspecialchars(urldecode($_GET['success'])); ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/login" method="POST" class="space-y-6">
-            <div>
-                <label for="email" class="block text-sm font-bold text-black mb-1">Email address</label>
-                <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>" class="mt-1 block w-full px-3 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-black" placeholder="you@example.com">
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-bold text-black mb-1">Password</label>
-                <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 bg-white border border-black rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-black" placeholder="Password">
-            </div>
-            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                <i class="fas fa-sign-in-alt mr-2"></i> Login
-            </button>
-        </form>
-        <p class="mt-6 text-center text-sm">
-            Don't have an account?
-            <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/showRegistrationForm" class="font-medium text-black hover:text-gray-700 underline">
-                Register here
-            </a>
-        </p>
-    </div>
+<div class="max-w-md mx-auto mt-10">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h2>
+    <form action="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/login" method="POST" class="bg-white p-8 rounded-lg shadow-md border border-gray-200 space-y-6">
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
+            <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($_GET['email'] ?? ''); ?>" class="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
+        </div>
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+            <input type="password" id="password" name="password" required class="w-full p-3 border border-gray-300 rounded-md focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold py-3 px-4 rounded transition-colors duration-300 ease-in-out transform hover:scale-105"><i class="fas fa-sign-in-alt mr-2"></i> Login</button>
+    </form>
+    <p class="text-center mt-6 text-gray-600">Don't have an account? <a href="<?php echo htmlspecialchars($APP_BASE_URL); ?>user/showRegistrationForm" class="text-blue-600 hover:text-blue-800 font-semibold">Register here</a>.</p>
 </div>
-
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
